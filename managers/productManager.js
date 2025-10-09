@@ -1,5 +1,5 @@
-import { fs } from "fs";
-import { randomUUID } from "crypto";
+import fs from "fs/promises";
+import crypto from "crypto";
 import path from "path";
 import { fileURLToPath } from "url";
 
