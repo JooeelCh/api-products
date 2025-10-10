@@ -81,6 +81,7 @@ class ProductManager {
   async getProductById(pid) {
     const products = await this.readFile();
     const product = products.find((p) => p.id === pid);
+    return product;
   }
 
   async deleteProduct(pid) {

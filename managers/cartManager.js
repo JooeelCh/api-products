@@ -65,6 +65,7 @@ class CartManager {
     if (!cart) {
       throw new Error(`El carrito con id ${cid} no existe`);
     }
+    return cart;
   }
 }
 
