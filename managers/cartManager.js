@@ -48,7 +48,7 @@ class CartManager {
 
     const cart = carts[index];
     const pindex = cart.products.findIndex((p) => p.product === pid);
-    if (pindex) {
+    if (pindex !== -1) {
       cart.products[pindex].quantity += 1;
     } else {
       cart.products.push({ product: pid, quantity: 1 });

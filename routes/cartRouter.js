@@ -13,6 +13,15 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.get("/", async (req, res) => {
+  try {
+    const carts = await cartManager.readFile();
+    res.json(carts);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 router.get("/:cid", async (req, res) => {
   try {
     const cart = await cartManager.getCartById(req.params.cid);
