@@ -1,6 +1,7 @@
 [
   {
     "id": "e86ce3f9-814e-412c-81ef-6b3457bd3e14",
+    "tittle": "Mouse Gamer",
     "description": "Mouse gamer inalámbrico",
     "code": "MOUSE123",
     "price": 120,
@@ -13,6 +14,7 @@
   },
   {
     "id": "650d4dbc-7eb1-4511-86d9-2433c6455a8e",
+    "tittle": "Auriculares Gamer",
     "description": "Auriculares inalámbrico",
     "code": "AURICULARES123",
     "price": 220,
