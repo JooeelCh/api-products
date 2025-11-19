@@ -1,0 +1,37 @@
+<h1 class="mb-4">Tu Carrito</h1>
+
+{{#if cart.products.length}}
+  <ul class="list-group">
+
+    {{#each cart.products}}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        
+        <div>
+          <strong>{{this.product.title}}</strong>
+          <br />
+          <span class="text-muted">${{this.product.price}}</span>
+        </div>
+
+        <div class="d-flex align-items-center gap-3">
+          <span>Cantidad: {{this.quantity}}</span>
+
+          <a 
+            href="/carts/{{../cart._id}}/remove/{{this.product._id}}" 
+            class="btn btn-sm btn-danger">
+            Eliminar
+          </a>
+        </div>
+      </li>
+    {{/each}}
+
+  </ul>
+
+  <a href="/" class="btn btn-primary mt-4">Seguir comprando</a>
+
+{{else}}
+  <div class="alert alert-info text-center">
+    Tu carrito está vacío.
+  </div>
+
+  <a href="/" class="btn btn-primary mt-3">Ver productos</a>
+{{/if}}

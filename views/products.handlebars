@@ -1,0 +1,52 @@
+<h1 class="mb-4">Productos</h1>
+
+<div class="row g-4">
+  {{#each products}}
+    <div class="col-md-4">
+      <div class="card h-100">
+        <img 
+          src="{{this.thumbnail}}" 
+          class="card-img-top" 
+          alt="{{this.title}}" 
+        />
+
+        <div class="card-body">
+          <h5 class="card-title">{{this.title}}</h5>
+          <p class="card-text text-muted">Precio: ${{this.price}}</p>
+
+          <a href="/products/{{this._id}}" class="btn btn-primary w-100">
+            Ver detalle
+          </a>
+        </div>
+      </div>
+    </div>
+  {{/each}}
+</div>
+
+<!-- Paginación -->
+{{#if pagination}}
+<nav class="mt-4">
+  <ul class="pagination justify-content-center">
+    
+    {{#if pagination.hasPrevPage}}
+      <li class="page-item">
+        <a class="page-link" href="/?page={{pagination.prevPage}}">Anterior</a>
+      </li>
+    {{else}}
+      <li class="page-item disabled"><span class="page-link">Anterior</span></li>
+    {{/if}}
+
+    <li class="page-item active">
+      <span class="page-link">{{pagination.page}}</span>
+    </li>
+
+    {{#if pagination.hasNextPage}}
+      <li class="page-item">
+        <a class="page-link" href="/?page={{pagination.nextPage}}">Siguiente</a>
+      </li>
+    {{else}}
+      <li class="page-item disabled"><span class="page-link">Siguiente</span></li>
+    {{/if}}
+  </ul>
+</nav>
+{{/if}}
