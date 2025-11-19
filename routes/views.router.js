@@ -1,10 +1,10 @@
 import { Router } from "express";
-import Product from "../models/product.model";
-import Cart from "../models/cart.model";
+import Product from "../models/product.model.js";
+import Cart from "../models/cart.model.js";
 
-const router = Router();
+const viewsRouter = Router();
 
-router.get("/", async (req, res) => {
+viewsRouter.get("/", async (req, res) => {
   try {
     const { limit = 10, page = 1 } = req.query;
     const { docs: products, ...pagination } = await Product.paginate(
@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/products/:pid", async (req, res) => {
+viewsRouter.get("/products/:pid", async (req, res) => {
   try {
     const products = await Product.getProductsById(req.params.pid);
 
@@ -30,7 +30,7 @@ router.get("/products/:pid", async (req, res) => {
   }
 });
 
-router.get("/carts/:cid", async (req, res) => {
+viewsRouter.get("/carts/:cid", async (req, res) => {
   try {
     const cart = await Cart.getCartsById(req.params.cid);
 
@@ -44,4 +44,4 @@ router.get("/carts/:cid", async (req, res) => {
   }
 });
 
-export default router;
+export default viewsRouter;

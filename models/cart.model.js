@@ -12,6 +12,10 @@ const cartSchema = new mongoose.Schema(
   { _id: false }
 );
 
+cartSchema.statics.getCartsById = function (id) {
+  return this.findById(id);
+};
+
 const Cart = mongoose.model("Cart", cartSchema);
 
 export default Cart;
