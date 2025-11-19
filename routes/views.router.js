@@ -1,22 +1,44 @@
 import { Router } from "express";
-import ProductManager from "../managers/productManager.js";
+import Product from "../models/product.model";
+import Cart from "../models/cart.model";
 
 const router = Router();
-const productManager = new ProductManager();
 
 router.get("/", async (req, res) => {
   try {
-    const products = await productManager.getProducts();
-    res.render("home", { products, title: "Home" });
+    const { limit = 10, page = 1 } = req.query;
+    const { docs: products, ...pagination } = await Product.paginate(
+      {},
+      { page, limit, lean: true }
+    );
+    res.render("products", { products, pagination, title: "Inicio" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-router.get("/realTimeProducts", async (req, res) => {
+router.get("/products/:pid", async (req, res) => {
   try {
-    const products = await productManager.getProducts();
-    res.render("realTimeProducts", { products, title: "Productos" });
+    const products = await Product.getProductsById(req.params.pid);
+
+    if (!products)
+      return res.status(404).json({ error: "Producto no encontrado" });
+
+    res.render("product", { products, title: "Productos" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get("/carts/:cid", async (req, res) => {
+  try {
+    const cart = await Cart.getCartsById(req.params.cid);
+
+    if (!cart) return res.status(404).json({ error: "Carrito no encontrado" });
+
+    const populatedCart = await cart.populate("products.product");
+
+    res.render("cart", { cart: populatedCart, title: "Carrito" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

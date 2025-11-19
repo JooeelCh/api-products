@@ -1,6 +1,7 @@
 import express from "express";
 import productsRouter from "./routes/products.router.js";
-import connectDB from "./config/db";
+import cartsRouter from "./routes/cart.router.js";
+import connectDB from "./config/db.js";
 
 const app = express();
 

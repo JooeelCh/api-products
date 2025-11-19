@@ -1,64 +1,105 @@
 import { Router } from "express";
-import ProductManager from "../managers/productManager.js";
+import Product from "../models/product.model.js";
 
-const router = Router();
-const productManager = new ProductManager();
+const productsRouter = Router();
 
-router.get("/", async (req, res) => {
+productsRouter.get("/", async (req, res) => {
   try {
-    const products = await productManager.getProducts();
-    res.json(products);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+    const { limit = 10, page = 1, sort, query } = req.query;
 
-router.get("/:pid", async (req, res) => {
-  try {
-    const product = await productManager.getProductById(req.params.pid);
-    if (!product) {
-      return res.status(404).json({ error: "Producto no encontrado" });
+    const filter = {};
+    if (query === "available") {
+      filter.status = true;
+    } else if (query === "unavailable") {
+      filter.status = false;
+    } else if (query) {
+      filter.category = query;
     }
-    res.json(product);
+
+    const options = {
+      limit: Number(limit),
+      page: Number(page),
+      lean: true,
+    };
+
+    if (sort) {
+      options.sort = { price: sort === "asc" ? 1 : -1 };
+    }
+
+    const products = await Product.paginate(filter, options);
+
+    res.json({
+      status: "success",
+      payload: products.docs,
+      totalPages: products.totalPages,
+      prevPage: products.prevPage,
+      nextPage: products.nextPage,
+      page: products.page,
+      hasPrevPage: products.hasPrevPage,
+      hasNextPage: products.hasNextPage,
+      prevLink: products.hasPrevPage
+        ? `/products?limit=${limit}&page=${products.prevPage}`
+        : null,
+      nextLink: products.hasNextPage
+        ? `/products?limit=${limit}&page=${products.nextPage}`
+        : null,
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: "Error interno" });
   }
 });
 
-router.post("/", async (req, res) => {
+productsRouter.post("/", async (req, res) => {
   try {
-    const newProduct = await productManager.addProduct(req.body);
-    res.status(201).json(newProduct);
+    const newProduct = new Product(req.body);
+    const savedProduct = await newProduct.save();
+    res.status(201).json(savedProduct);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(500).json({ error: "Error interno" });
   }
 });
 
-router.put("/:pid", async (req, res) => {
+productsRouter.get("/:pid", async (req, res) => {
   try {
-    const updatedProduct = await productManager.updateProduct(
+    const product = await Product.findById(req.params.pid).lean();
+    if (product) {
+      res.json(product);
+    } else {
+      res.status(404).json({ error: "Producto no encontrado" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Error interno" });
+  }
+});
+
+productsRouter.put("/:pid", async (req, res) => {
+  try {
+    const updatedProduct = await Product.findByIdAndUpdate(
       req.params.pid,
-      req.body
+      req.body,
+      { new: true }
     );
-    if (!updatedProduct) {
-      return res.status(404).json({ error: "Producto no encontrado" });
+    if (updatedProduct) {
+      res.json(updatedProduct);
+    } else {
+      res.status(404).json({ error: "Producto no encontrado" });
     }
-    res.json(updatedProduct);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(500).json({ error: "Error interno" });
   }
 });
 
-router.delete("/:pid", async (req, res) => {
+productsRouter.delete("/:pid", async (req, res) => {
   try {
-    const deletedProduct = await productManager.deleteProduct(req.params.pid);
-    if (!deletedProduct) {
-      return res.status(404).json({ error: "Producto no encontrado" });
+    const deletedProduct = await Product.findByIdAndDelete(req.params.pid);
+    if (deletedProduct) {
+      res.json({ message: "Producto eliminado" });
+    } else {
+      res.status(404).json({ error: "Producto no encontrado" });
     }
-    res.json(deletedProduct);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: "Error interno" });
   }
 });
 
-export default router;
+export default productsRouter;
