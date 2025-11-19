@@ -10,13 +10,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-app.get("/", (req, res) => {
-  res.render("products", { title: "Catalogo" });
-});
-
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
 app.set("views", "./views");
+
+app.get("/", (req, res) => {
+  res.render("products", { title: "Catalogo" });
+});
 
 app.use("/", viewsRouter);
 app.use("/api/products", productsRouter);
