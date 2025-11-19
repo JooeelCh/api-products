@@ -1,37 +1,30 @@
-<h1 class="mb-4">Tu Carrito</h1>
+<h1 class="mb-8 text-4xl font-bold text-center text-sky-900">Tu Carrito</h1>
 
 {{#if cart.products.length}}
-  <ul class="list-group">
 
+  <div class="flex flex-col gap-5">
     {{#each cart.products}}
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        
+      <div class="bg-white shadow-lg rounded-xl p-5 flex justify-between items-center">
+
         <div>
-          <strong>{{this.product.title}}</strong>
-          <br />
-          <span class="text-muted">${{this.product.price}}</span>
+          <h3 class="text-xl font-semibold">{{this.product.title}}</h3>
+          <p class="text-gray-600">💲 {{this.product.price}}</p>
         </div>
 
-        <div class="d-flex align-items-center gap-3">
-          <span>Cantidad: {{this.quantity}}</span>
-
-          <a 
-            href="/carts/{{../cart._id}}/remove/{{this.product._id}}" 
-            class="btn btn-sm btn-danger">
-            Eliminar
-          </a>
+        <div class="flex items-center gap-6">
+          <span class="font-medium">Cantidad: {{this.quantity}}</span>
+          <a href="/carts/{{../cart._id}}/remove/{{this.product._id}}" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition">Eliminar</a>
         </div>
-      </li>
+
+      </div>
     {{/each}}
-
-  </ul>
-
-  <a href="/" class="btn btn-primary mt-4">Seguir comprando</a>
-
-{{else}}
-  <div class="alert alert-info text-center">
-    Tu carrito está vacío.
   </div>
 
-  <a href="/" class="btn btn-primary mt-3">Ver productos</a>
+  <a href="/" class="mt-8 block bg-sky-700 hover:bg-sky-800 text-white py-3 text-center rounded-lg font-semibold">Seguir comprando</a>
+
+{{else}}
+  <div class="bg-sky-100 text-sky-900 p-6 rounded-xl text-center shadow-md">
+    Tu carrito está vacío
+  </div>
+  <a href="/" class="mt-6 block bg-sky-700 hover:bg-sky-800 text-white py-3 text-center rounded-lg font-semibold">Ver productos</a>
 {{/if}}

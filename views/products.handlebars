@@ -1,52 +1,36 @@
-<h1 class="mb-4">Productos</h1>
+<h1 class="mb-10 text-4xl font-bold text-center text-sky-900">Productos</h1>
 
-<div class="row g-4">
+<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
   {{#each products}}
-    <div class="col-md-4">
-      <div class="card h-100">
-        <img 
-          src="{{this.thumbnail}}" 
-          class="card-img-top" 
-          alt="{{this.title}}" 
-        />
-
-        <div class="card-body">
-          <h5 class="card-title">{{this.title}}</h5>
-          <p class="card-text text-muted">Precio: ${{this.price}}</p>
-
-          <a href="/products/{{this._id}}" class="btn btn-primary w-100">
-            Ver detalle
-          </a>
-        </div>
+    <div class="bg-white rounded-xl shadow-lg hover:shadow-2xl transition overflow-hidden">
+      <img src="{{this.thumbnail}}" alt="{{this.title}}" class="w-full h-56 object-cover"/>
+      <div class="p-5 flex flex-col gap-3">
+        <h5 class="text-xl font-semibold">{{this.title}}</h5>
+        <p class="text-gray-600 text-lg">$ {{this.price}}</p>
+        <a href="/products/{{this._id}}" class="mt-3 bg-sky-700 hover:bg-sky-800 text-white text-center py-2 rounded-lg font-medium transition">Ver detalle</a>
       </div>
     </div>
   {{/each}}
 </div>
 
-<!-- Paginación -->
 {{#if pagination}}
-<nav class="mt-4">
-  <ul class="pagination justify-content-center">
-    
+<div class="mt-10 flex justify-center">
+  <div class="flex items-center gap-3">
+
     {{#if pagination.hasPrevPage}}
-      <li class="page-item">
-        <a class="page-link" href="/?page={{pagination.prevPage}}">Anterior</a>
-      </li>
+      <a href="/?page={{pagination.prevPage}}" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg font-medium">← Anterior</a>
     {{else}}
-      <li class="page-item disabled"><span class="page-link">Anterior</span></li>
+      <span class="px-4 py-2 bg-gray-100 rounded-lg text-gray-400">← Anterior</span>
     {{/if}}
 
-    <li class="page-item active">
-      <span class="page-link">{{pagination.page}}</span>
-    </li>
+    <span class="px-4 py-2 bg-sky-700 text-white rounded-lg font-medium">Página {{pagination.page}}</span>
 
     {{#if pagination.hasNextPage}}
-      <li class="page-item">
-        <a class="page-link" href="/?page={{pagination.nextPage}}">Siguiente</a>
-      </li>
+      <a href="/?page={{pagination.nextPage}}" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg font-medium">Siguiente →</a>
     {{else}}
-      <li class="page-item disabled"><span class="page-link">Siguiente</span></li>
+      <span class="px-4 py-2 bg-gray-100 rounded-lg text-gray-400">Siguiente →</span>
     {{/if}}
-  </ul>
-</nav>
+
+  </div>
+</div>
 {{/if}}

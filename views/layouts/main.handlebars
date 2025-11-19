@@ -6,23 +6,27 @@
   <title>{{title}}</title>
   <link rel="stylesheet" href="/output.css" />
 </head>
-<body class="flex flex-col">
 
-  <nav class="flex justify-between items-center p-4 bg-sky-900 text-white mb-6">
-    <a class="text-3xl ml-10" href="/">Home</a>
+<body class="min-h-screen flex flex-col bg-gray-50 text-gray-800">
 
-    <div class="flex gap-10">
-      <a class="" href="/">Productos</a>
-      <a class="" href="/carts/123">Carrito</a> 
+  <nav class="flex justify-between items-center px-10 py-4 bg-sky-900 text-white shadow-md">
+    <a class="text-3xl font-bold tracking-wide hover:text-sky-300 transition" href="/">MiTienda</a>
+
+    <div class="flex gap-8 text-lg">
+      <a class="hover:text-sky-300 transition" href="/">Productos</a>
+      <a class="hover:text-sky-300 transition" href="/carts/123">Carrito</a>
     </div>
 
-    <a class="mr-10" href="">Iniciar Sesion</a>
+    <a class="hover:text-sky-300 transition" href="">Iniciar sesión</a>
   </nav>
 
-  <main class="min-h-100vh">
+  <main class="px-6 md:px-10 lg:px-20 py-10 flex-1">
     {{{body}}}
   </main>
 
-  <footer class="bg-sky-900 text-white text-center">Mi tienda 2025. Todos los derechos reservados</footer>
+  <footer class="bg-sky-900 text-white text-center py-4 mt-10">
+    Mi tienda 2025 • Todos los derechos reservados
+  </footer>
+
 </body>
 </html>
