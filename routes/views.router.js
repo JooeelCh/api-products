@@ -12,8 +12,6 @@ viewsRouter.get("/", async (req, res) => {
       { page, limit, lean: true }
     );
 
-    console.log("PRODUCTOS QUE LLEGAN A LA VISTA:", products);
-
     res.render("products", { products, pagination, title: "Inicio" });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -22,11 +20,12 @@ viewsRouter.get("/", async (req, res) => {
 
 viewsRouter.get("/products/:pid", async (req, res) => {
   try {
-    const products = await Product.getProductsById(req.params.pid);
-    res.render("product", { product });
+    const product = await Product.getProductsById(req.params.pid);
 
-    if (!products)
+    if (!product)
       return res.status(404).json({ error: "Producto no encontrado" });
+
+    res.render("product", { product, title: product.title });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

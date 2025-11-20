@@ -17,6 +17,10 @@ const productSchema = new mongoose.Schema(
 
 productSchema.plugin(mongoosePaginate);
 
+productSchema.statics.getProductsById = function (id) {
+  return this.findById(id);
+};
+
 const Product = mongoose.model("Product", productSchema);
 
 export default Product;
