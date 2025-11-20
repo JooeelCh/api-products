@@ -13,7 +13,11 @@
 
         <div class="flex items-center gap-6">
           <span class="font-medium">Cantidad: {{this.quantity}}</span>
-          <a href="/carts/{{../cart._id}}/remove/{{this.product._id}}" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition">Eliminar</a>
+          <button class="delete-btn"
+            data-cart="{{../cart._id}}"
+            data-product="{{this.product._id}}">
+            Eliminar
+          </button>
         </div>
 
       </div>
@@ -26,5 +30,24 @@
   <div class="bg-sky-100 text-sky-900 p-6 rounded-xl text-center shadow-md">
     Tu carrito está vacío
   </div>
-  <a href="/" class="mt-6 block bg-sky-700 hover:bg-sky-800 text-white py-3 text-center rounded-lg font-semibold">Ver productos</a>
+  <a href="/" class="mt-6 block bg-sky-700 hover:bg-sky-800 text-white py-3 text-center rounded-lg font-semibold">Seguir comprando</a>
 {{/if}}
+
+<script>
+  document.querySelectorAll(".delete-btn").forEach(btn => {
+    btn.addEventListener("click", async e => {
+      const cid = e.target.dataset.cart;
+      const pid = e.target.dataset.product;
+
+      const response = await fetch(`/api/carts/${cid}/product/${pid}`, {
+        method: "DELETE"
+      });
+
+      if (response.ok) {
+        window.location.reload();
+      } else {
+        alert("No se pudo eliminar el producto");
+      }
+    });
+  });
+</script>

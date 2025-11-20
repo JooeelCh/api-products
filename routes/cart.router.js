@@ -14,6 +14,15 @@ cartRouter.post("/", async (req, res) => {
   }
 });
 
+cartRouter.get("/", async (req, res) => {
+  try {
+    const carts = await Cart.find().populate("products.product").lean();
+    res.json(carts);
+  } catch (error) {
+    res.status(500).json({ error: "Error interno" });
+  }
+});
+
 cartRouter.get("/:cid", async (req, res) => {
   try {
     const cart = await Cart.findById(req.params.cid)

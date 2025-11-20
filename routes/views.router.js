@@ -1,8 +1,12 @@
 import { Router } from "express";
+import dotenv from "dotenv";
 import Product from "../models/product.model.js";
 import Cart from "../models/cart.model.js";
 
+dotenv.config();
+
 const viewsRouter = Router();
+const cartId = process.env.CART_ID;
 
 viewsRouter.get("/", async (req, res) => {
   try {
@@ -12,7 +16,12 @@ viewsRouter.get("/", async (req, res) => {
       { page, limit, lean: true }
     );
 
-    res.render("products", { products, pagination, title: "Inicio" });
+    res.render("products", {
+      products,
+      pagination,
+      title: "Inicio",
+      cartId: cartId,
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -20,12 +29,12 @@ viewsRouter.get("/", async (req, res) => {
 
 viewsRouter.get("/products/:pid", async (req, res) => {
   try {
-    const product = await Product.getProductsById(req.params.pid);
+    const product = await Product.getProductsById(req.params.pid).lean();
 
     if (!product)
       return res.status(404).json({ error: "Producto no encontrado" });
 
-    res.render("product", { product, title: product.title });
+    res.render("product", { product, title: product.title, cartId: cartId });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -33,13 +42,13 @@ viewsRouter.get("/products/:pid", async (req, res) => {
 
 viewsRouter.get("/carts/:cid", async (req, res) => {
   try {
-    const cart = await Cart.getCartsById(req.params.cid);
+    const cart = await Cart.findById(req.params.cid)
+      .populate("products.product")
+      .lean();
 
     if (!cart) return res.status(404).json({ error: "Carrito no encontrado" });
 
-    const populatedCart = await cart.populate("products.product");
-
-    res.render("cart", { cart: populatedCart, title: "Carrito" });
+    res.render("cart", { cart, title: "Carrito" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
