@@ -1,12 +1,8 @@
 import { Router } from "express";
-import dotenv from "dotenv";
 import Product from "../models/product.model.js";
 import Cart from "../models/cart.model.js";
 
-dotenv.config();
-
 const viewsRouter = Router();
-const cartId = process.env.CART_ID;
 
 viewsRouter.get("/", async (req, res) => {
   try {
@@ -20,7 +16,6 @@ viewsRouter.get("/", async (req, res) => {
       products,
       pagination,
       title: "Inicio",
-      cartId: cartId,
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -34,7 +29,7 @@ viewsRouter.get("/products/:pid", async (req, res) => {
     if (!product)
       return res.status(404).json({ error: "Producto no encontrado" });
 
-    res.render("product", { product, title: product.title, cartId: cartId });
+    res.render("product", { product, title: product.title });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

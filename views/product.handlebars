@@ -19,15 +19,27 @@
 
 <script>
   document.getElementById("addToCartBtn").addEventListener("click", async (e) => {
-    const cartId = e.target.dataset.cart;
+
+    let cartId = localStorage.getItem("cartId"); // <-- importante
+
     const productId = e.target.dataset.product;
 
+    if (!cartId) {
+      const resp = await fetch("/api/carts", { method: "POST" });
+      if (!resp.ok) return alert("Error creando carrito");
+
+      const data = await resp.json();
+      cartId = data._id;
+      localStorage.setItem("cartId", cartId);
+    }
+
+    // Ahora sí agregar al carrito real
     const response = await fetch(`/api/carts/${cartId}/product/${productId}`, {
       method: "POST"
     });
 
     if (response.ok) {
-      alert("Producto agregado al carrito");
+      alert("Producto agregado");
       window.location.href = `/carts/${cartId}`;
     } else {
       alert("Error al agregar al carrito");
